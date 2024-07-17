@@ -1,7 +1,11 @@
 import os
 import requests
+from dotenv import load_dotenv
 
-# Import Environment Variables
+# Load Environment Variables
+load_dotenv()
+
+# Parse Environment Variables
 WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
 LOCATION = os.getenv('LOCATION')
 BOT_API_KEY = os.getenv('BOT_API_KEY')
@@ -50,12 +54,12 @@ def create_icon(icon: str) -> str:
 
 
 if __name__ == '__main__':
+
     try:
         resp = requests.get(weather_url)
         resp.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        print(f"Error: {err}")
-        exit(1)
+        raise SystemExit(err)
     forecast = resp.json()['currentConditions']
     output_str=(f"""
           Todays Weather in {resp.json()['resolvedAddress']} is as follows {create_icon(forecast['icon'])}:
